@@ -1,0 +1,43 @@
+version: "3"
+tasks:
+  build:
+    aliases: [ b ]
+    desc: Build devcontainer image `IMAGE:TAG`
+    preconditions:
+      - sh: test -n "{{.IMAGE}}"
+        msg: Missing `IMAGE` argument
+    vars:
+      SRC: '{{default .IMAGE .SRC}}'
+      TAG: '{{default "latest" .TAG}}'
+    cmds:
+      - devcontainer build {{.CLI_ARGS}} --image-name {{.CONTAINER_REGISTRY}}/devcontainers-{{.IMAGE}}:{{.TAG}} --workspace-folder src/{{.SRC}}
+  build-all:
+    aliases: [ ba ]
+    desc: Build *ALL* devcontainer images
+    cmds:
+      - task: build
+        vars: { IMAGE: base, TAG: debian, SRC: base-debian  }
+      - task: build
+        vars: { IMAGE: python }
+      - task: build
+        vars: { IMAGE: universal }
+  push:
+    aliases: [ p ]
+    desc: Push devcontainer image `IMAGE:TAG`
+    preconditions:
+      - sh: test -n "{{.IMAGE}}"
+        msg: Missing `IMAGE` argument
+    vars:
+      TAG: '{{default "latest" .TAG}}'
+    cmds:
+      - docker push {{.CONTAINER_REGISTRY}}/devcontainers-{{.IMAGE}}:{{.TAG}}
+  push-all:
+    aliases: [ pa ]
+    desc: Push *ALL* devcontainer images
+    cmds:
+      - task: push
+        vars: { IMAGE: base, TAG: debian }
+      - task: push
+        vars: { IMAGE: python }
+      - task: push
+        vars: { IMAGE: universal }

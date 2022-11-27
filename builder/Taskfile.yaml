@@ -1,0 +1,39 @@
+version: "3"
+vars:
+  BUILDER_IMAGE: devcontainers-builder
+  BUILDER_TAG: latest
+  TASK_VERSION: 3.18.0
+  TASK_SHA256: b8bb5258d5fa3f0e278309b393b67a56065c0fa0e69be73e110b45094fa1e01c
+tasks:
+  build:
+    aliases: [ b ]
+    desc: Build `{{.CONTAINER_REGISTRY}}/{{.BUILDER_IMAGE}}:{{.BUILDER_TAG}}`
+    cmds:
+      - >-
+        docker build {{.CLI_ARGS}}
+        --build-arg TASK_VERSION={{.TASK_VERSION}} 
+        --build-arg TASK_SHA256={{.TASK_SHA256}} 
+        -t {{.CONTAINER_REGISTRY}}/{{.BUILDER_IMAGE}}:{{.BUILDER_TAG}} 
+        .
+  push:
+    aliases: [ p ]
+    desc: Push `{{.CONTAINER_REGISTRY}}/{{.BUILDER_IMAGE}}:{{.BUILDER_TAG}}`
+    cmds:
+      - docker push {{.CONTAINER_REGISTRY}}/{{.BUILDER_IMAGE}}:{{.BUILDER_TAG}}
+  shell:
+    aliases: [ s ]
+    desc: >-
+      Echo `docker run ... bash` for `eval $(task {{.TASK}})`
+    silent: true
+    cmds:
+      - >- 
+        echo '
+        docker 
+        run 
+        --rm 
+        -it 
+        -v /var/run/docker.sock:/var/run/docker.sock 
+        -v $PWD:/workdir 
+        -w /workdir 
+        {{.CONTAINER_REGISTRY}}/{{.BUILDER_IMAGE}}:{{.BUILDER_TAG}}
+        bash'

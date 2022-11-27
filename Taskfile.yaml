@@ -1,0 +1,12 @@
+version: "3"
+vars:
+  CONTAINER_REGISTRY: mgbowman
+includes:
+  builder:
+    aliases: [ b ]
+    dir: builder
+    taskfile: builder/Taskfile.yaml
+  images:
+    aliases: [ i ]
+    dir: images
+    taskfile: images/Taskfile.yaml

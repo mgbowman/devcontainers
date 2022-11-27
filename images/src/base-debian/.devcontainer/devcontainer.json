@@ -1,0 +1,32 @@
+{
+	// https://github.com/devcontainers/images/blob/main/src/base-debian/.devcontainer/devcontainer.json
+	"image": "mcr.microsoft.com/devcontainers/base:debian",
+	// https://github.com/devcontainers/features
+	"features": {
+		// included with `devcontainers/base:debian`
+		// "ghcr.io/devcontainers/features/common-utils:1": {},
+		// "ghcr.io/devcontainers/features/git:1": {},
+		// https://github.com/eitsupi/devcontainer-features/tree/main/src/go-task
+		"ghcr.io/eitsupi/devcontainer-features/go-task:0": {}
+	},
+    // Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			"extensions": [
+				// git
+				"eamodio.gitlens",
+				// jq
+				"davidnussio.vscode-jq-playground",
+				"jq-syntax-highlighting.jq-syntax-highlighting",
+				// mongo
+				"mongodb.mongodb-vscode",
+				// yaml
+				"oderwat.indent-rainbow",
+				"redhat.vscode-yaml",
+				// xml
+				"redhat.vscode-xml"
+			]
+		}
+	}
+}
